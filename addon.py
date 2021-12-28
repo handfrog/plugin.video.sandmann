@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright 2019 sorax
+# Copyright 2021 sorax, handfrog
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,7 +25,10 @@ import xbmcplugin
 import xbmcgui
 import xbmcaddon
 
-episodes_url = "https://appdata.ardmediathek.de/appdata/servlet/tv/Sendung?documentId=6503982&json"
+# rbb version
+# episodes_url = "https://appdata.ardmediathek.de/appdata/servlet/tv/Sendung?documentId=6503982&json"
+# mdr version
+episodes_url = "https://appdata.ardmediathek.de/appdata/servlet/tv/Sendung?documentId=11094342&json"
 
 addon = xbmcaddon.Addon()
 # addon_name = addon.getAddonInfo("name")
@@ -37,13 +40,12 @@ base_path = sys.argv[0]
 quality = addon.getSettingInt("quality")
 update = addon.getSettingInt("update")
 interval = addon.getSettingInt("interval")
-dgs = addon.getSettingBool("dgs")
 
 refresh_timer = None
 
 
 def addEpisodes():
-    episodes = getEpisodes(episodes_url, quality, dgs)
+    episodes = getEpisodes(episodes_url, quality)
     episode_list = []
     for episode in episodes:
         episode_list.append((episode["stream"], getListItem(episode), False))
@@ -74,7 +76,7 @@ def reload():
 
 
 if update == 0:
-    global refresh_timer
+    # global refresh_timer
     # xbmc.executebuiltin("Notification(%s, %s, %d, %s)" %
     #                     (addon_name, "Updating...", 5000, addon_icon))
     refresh_timer = Timer(interval * 60 * 60, reload)
